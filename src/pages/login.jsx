@@ -1,30 +1,24 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useNavigate, Link } from "react-router-dom";
-import { register } from "../utils/api";
+import { login } from "../utils/api";
 import useInput from "../hooks/useInput";
 import Input from "../components/Input";
 import InputLabel from "../components/InputLabel";
 import Button from "../components/Button";
 
-function Register() {
+function Login({ loginSuccess }) {
   const navigate = useNavigate();
+  const [email, onEmailChange] = useInput("witmiqonq@wtoqjt.com");
+  const [password, onPasswordChange] = useInput("123456");
 
-  const [name, onNameChange] = useInput("");
-  const [email, onEmailChange] = useInput("");
-  const [password, onPasswordChange] = useInput("");
-  const [confirmPassword, onConfirmPasswordChange] = useInput("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { error, data } = await login({ email, password });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    const result = await register({ name, email, password });
-
-    // if no error, redirect
-    if (!result.error) {
-      navigate("/login");
+    if (!error) {
+      loginSuccess(data);
+      navigate("/");
     }
   };
 
@@ -37,21 +31,9 @@ function Register() {
 
         <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
           <h1 className="font-bold text-2xl tracking-wide uppercase py-3">
-            Register
+            Login
           </h1>
           <form onSubmit={handleSubmit} className="*:mt-4">
-            <div>
-              <InputLabel value="Name" />
-              <Input
-                id="name"
-                className="block mt-1 w-full"
-                type="text"
-                name="name"
-                required
-                value={name}
-                onChange={onNameChange}
-              />
-            </div>{" "}
             <div>
               <InputLabel value="Email address" />
               <Input
@@ -76,26 +58,14 @@ function Register() {
                 onChange={onPasswordChange}
               />
             </div>{" "}
-            <div>
-              <InputLabel value="Confirm password" />
-              <Input
-                id="confirmPassword"
-                className="block mt-1 w-full"
-                type="password"
-                name="confirmPassword"
-                required
-                value={confirmPassword}
-                onChange={onConfirmPasswordChange}
-              />
-            </div>
             <div className="flex items-center justify-end mt-4">
               <Link
-                to="/login"
                 className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                to="/register"
               >
-                Already registered?
+                Don't have account ? create here!
               </Link>
-              <Button className="ms-4">Register</Button>
+              <Button className="ms-4">Login</Button>
             </div>
           </form>
         </div>
@@ -104,4 +74,8 @@ function Register() {
   );
 }
 
-export default Register;
+Login.propTypes = {
+  loginSuccess: PropTypes.func.isRequired,
+};
+
+export default Login;
