@@ -4,9 +4,9 @@ import { AuthContext } from "../context/AuthContext";
 
 import SecondaryButton from "../components/SecondaryButton";
 
-import NoteList from "../components/NoteList";
+import NoteView from "../components/NoteView";
 
-function Dashboard() {
+function NoteDetail() {
   const { authedUser, onLogout, initializing } = useContext(AuthContext);
 
   if (initializing) {
@@ -22,7 +22,7 @@ function Dashboard() {
         <header className="bg-white shadow">
           <div className="max-w-7xl flex items-center justify-between mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="font-semibold text-xl text-gray-800 leading-tight">
-              Dashboard
+              NoteDetail
             </h1>
             <div className="flex items-center">
               <div className="mr-4">{authedUser.name}</div>
@@ -36,7 +36,7 @@ function Dashboard() {
           <div className="py-12">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <NoteList />
+                <NoteView />
               </div>
             </div>
           </div>
@@ -46,4 +46,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default NoteDetail;
